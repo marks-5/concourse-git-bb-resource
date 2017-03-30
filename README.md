@@ -25,7 +25,7 @@ Tracks the commits in a [git](http://git-scm.com/) repository.
   This is needed when only HTTP/HTTPS protocol for git is available (which does not support private key auth)
   and auth is required.
 
-* `password`: *Optional.* Password for HTTP(S) auth when pulling/pushing. 
+* `password`: *Optional.* Password for HTTP(S) auth when pulling/pushing.
 
    Note: You can also use pipeline templating to hide this password in source control. (For more information: https://concourse.ci/fly-set-pipeline.html)
 
@@ -72,6 +72,20 @@ Tracks the commits in a [git](http://git-scm.com/) repository.
 
 * `gpg_keyserver`: *Optional.* GPG keyserver to download the public keys from.
   Defaults to `hkp:///keys.gnupg.net/`.
+
+* `blackbox_gpg_key`: *Optional.* GPG private key to use to decrypt all files
+  in the repository encrypted with [BlackBox](https://github.com/StackExchange/blackbox).
+    Example:
+    ```
+    blackbox_gpg_key: |
+      -----BEGIN PGP PRIVATE KEY BLOCK-----
+      Version: GnuPG v1
+
+      MIIEowIBAAKCAQEAtCS10/f7W7lkQaSgD/mVeaSOvSF9ql4hf/zfMwfVGgHWjj+W
+      <Lots more text>
+      DWiJL+OFeg9kawcUL6hQ8JeXPhlImG6RTUffma9+iGQyyBMCGd1l
+      -----END PGP PRIVATE KEY BLOCK-----
+    ```
 
 ### Example
 
