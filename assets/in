@@ -37,6 +37,7 @@ commit_verification_key_ids=$(jq -r '(.source.commit_verification_key_ids // [])
 commit_verification_keys=$(jq -r '(.source.commit_verification_keys // [])[]' < $payload)
 gpg_keyserver=$(jq -r '.source.gpg_keyserver // "hkp://keys.gnupg.net/"' < $payload)
 disable_git_lfs=$(jq -r '(.params.disable_git_lfs // false)' < $payload)
+blackbox_gpg_key=$(jq -r '.source.blackbox_gpg_key // ""' < $payload)
 
 configure_git_global "${git_config_payload}"
 
@@ -115,6 +116,12 @@ if [ "$ref" == "HEAD" ]; then
   return_ref=$(git rev-parse HEAD)
 else
   return_ref=$ref
+fi
+
+if [ ! -z "$blackbox_gpg_key" ]; then
+  echo "$blackbox_gpg_key" >> ~/gpg-private-key.pem
+  gpg --allow-secret-key-import --import ~/gpg-private-key.pem
+  blackbox_decrypt_all_files
 fi
 
 jq -n "{
